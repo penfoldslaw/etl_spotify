@@ -2,3 +2,4 @@
 .cache
 .env
 top_artists.csv
+_pycache_

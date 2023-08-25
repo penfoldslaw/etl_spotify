@@ -4,8 +4,13 @@ from spotipy.oauth2 import SpotifyOAuth
 import pandas as pd
 import os
 from dotenv import load_dotenv
+from cache_manager import manage_cache
+
+
 
 load_dotenv()
+manage_cache()
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -64,8 +69,9 @@ def top_artists():
     print(df_sorted)
 
     # Save the DataFrame to a CSV file
-    csv_filename = 'top_artists.csv'
+    csv_filename = os.environ.get('csv_filename')
     df_sorted.to_csv(csv_filename, index=False)
+
 
     # Render the DataFrame as HTML using Flask's render_template
     return render_template('top_artists.html', top_artists=df_sorted.to_html(index=False))
@@ -74,3 +80,4 @@ def top_artists():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
