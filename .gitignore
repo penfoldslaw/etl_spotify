@@ -1,5 +1,4 @@
 
 .cache
 .env
-top_artists.csv
 __pycache__
