@@ -6,6 +6,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY etl.py .
+COPY etl/etl.py .
 
-CMD ["python", "etl.py"]
+
+CMD ["python", "real_etl.py"]
