@@ -1,4 +1,7 @@
 
 .cache
 .env
-__pycache__
+.terraform.lock.hcl
+.terraform
+myplan.tfplan
+terraform.tfstate

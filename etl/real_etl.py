@@ -5,6 +5,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 from cache_manager import manage_cache
+import boto3
 
 
 
@@ -19,6 +20,10 @@ SPOTIPY_CLIENT_ID = os.environ.get('CLIENT_ID')
 SPOTIPY_CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
 SPOTIPY_REDIRECT_URI = 'http://localhost:5000/callback'  # Match the registered redirect URI
 SPOTIPY_SCOPE = 'user-top-read'
+
+s3_client = boto3.client('s3')
+s3_bucket_name = 'etl-spotify-bucket'
+
 
 sp_oauth = SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, scope=SPOTIPY_SCOPE)
 
@@ -73,9 +78,21 @@ def top_artists():
     df_sorted.to_csv(csv_filename, index=False)
 
 
+# Save the DataFrame to a CSV file
+
+    csv_filename = os.environ.get('csv_filename')
+    csv_path = os.path.join(os.getcwd(), csv_filename)
+    df_sorted.to_csv(csv_path, index=False)
+
+
+
+# Upload the CSV file to S3
+    s3_client.upload_file(csv_path, s3_bucket_name, csv_filename)
+
     # Render the DataFrame as HTML using Flask's render_template
     return render_template('top_artists.html', top_artists=df_sorted.to_html(index=False))
     
+
 
 
 if __name__ == '__main__':
